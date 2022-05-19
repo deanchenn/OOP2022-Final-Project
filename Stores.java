@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class Stores {
 	//助教提供的商家資訊的規格定義
@@ -21,6 +22,10 @@ public class Stores {
 	
 	private Orders[] orderList; // 訂單的list
 	private Orders[] historyOrders; // 歷史訂單的list
+	
+	
+	
+	//getters
 
 	public String getAccount() {
 		return account;
@@ -53,21 +58,88 @@ public class Stores {
 		return order_description;
 	}
 	public String[] getType() {
-		return type;
+	    String[] copy = new String[this.type.length];
+	    System.arraycopy(this.type, 0, copy, 0, copy.length);
+	    return copy;
 	}
 	public Items[] getItemList() {
-		return itemList;
+		Items[] copy = new Items[this.itemList.length];
+	    System.arraycopy(this.itemList, 0, copy, 0, copy.length);
+	    return copy;
 	}
 	public String[] getBusinessTime() {
-		return businessTime;
+		String[] copy = new String[this.businessTime.length];
+	    System.arraycopy(this.businessTime, 0, copy, 0, copy.length);
+	    return copy;
 	}
 	public Orders[] getOrderList() {
-		return orderList;
+		Orders[] copy = new Orders[this.orderList.length];
+	    System.arraycopy(this.orderList, 0, copy, 0, copy.length);
+	    return copy;
 	}
 	public Orders[] getHistoryOrders() {
-		return historyOrders;
+		Orders[] copy = new Orders[this.orderList.length];
+	    System.arraycopy(this.orderList, 0, copy, 0, copy.length);
+	    return copy;
 	}
+	
+	
+	//setters
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setDiscountThreshold(int discount_threshold) {
+		this.discount_threshold = discount_threshold;
+	}
+	public void setDiscountAmount(int discount_amount) {
+		this.discount_amount = discount_amount;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public void setStoreDescription(String store_description) {
+		this.store_description = store_description;
+	}
+	public void setOrderDescription(String order_description) {
+		this.order_description = order_description;
+	}
+	public void setType(String[] type) {
+	    this.type = new String[type.length];
+	    System.arraycopy(type, 0, this.type, 0, type.length);
+	}
+	public void setItemList(Items[] itemList) {
+	    this.itemList = new Items[itemList.length];
+	    System.arraycopy(itemList, 0, this.itemList, 0, itemList.length);
+	}
+	public void setBusinessTime(String[] businessTime) {
+	    this.businessTime = new String[businessTime.length];
+	    System.arraycopy(businessTime, 0, this.businessTime, 0, businessTime.length);
+	}
+	public void setOrderList(Orders[] orderList) {
+	    this.orderList = new Orders[orderList.length];
+	    System.arraycopy(orderList, 0, this.orderList, 0, orderList.length);
+	}
+	public void setHistoryOrders(Orders[] historyOrders) {
+	    this.historyOrders = new Orders[historyOrders.length];
+	    System.arraycopy(historyOrders, 0, this.historyOrders, 0, historyOrders.length);
+	}
+	
+	
 }
+
+
 
 /*
  * 問題：
