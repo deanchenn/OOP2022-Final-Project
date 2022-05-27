@@ -1,4 +1,36 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.util.LinkedList;
+import java.util.Queue;
+/*
+ * queue相關語法：
+ * 	offer 添加元素
+ *  poll 返回第一個元素並刪除
+ *  element/peek 返回第一個元素
+ *  
+ */
+
+/**
+ * 
+ * @author yuhanchiang, deanchenn
+ * @version 2022/5/23
+ * @changes
+ * added: JSONObject info
+ * changed: setters,
+ * 			business time -> JSONObject (might change later)
+ * 
+ */
 
 public class Stores {
 	//助教提供的商家資訊的規格定義
@@ -11,22 +43,40 @@ public class Stores {
 	
 	//店家其他資訊（提供json檔）
 	
+	private static JSONObject info;	//  New: info contains all the data of the store
 	private String name;
 	private Position position;
 	private String phone;
 	private String store_description;
 	private String order_description;
-	private String[] type;
-	private Items[] itemList; //商品清單
-	private String[] businessTime; //營業時間
+	// private String[] type;
+	private Queue<String> type;
+	// private Items[] itemList; //商品清單, retrieves one dish from menu
+	private Queue<Items> itemList;
+	private JSONObject businessTime; //營業時間
 	
-	private Orders[] orderList; // 訂單的list
-	private Orders[] historyOrders; // 歷史訂單的list
+	// private Orders[] orderList; // 訂單的list
+	private Queue<Orders> orderList;
+	// private Orders[] historyOrders; // 歷史訂單的list
+	private Queue<Orders> historyOrders;
 	
+	// constructor
 	
+	public Stores(int index) {
+		this.info = Stores.Loader(index);  
+		this.name = Stores.setName();
+		this.position = Stores.setPosition();	// no problem writing here
+
+		this.phone = Stores.setPhone();			// problem
+		this.store_description = Stores.setStoreDescription();
+		this.order_description = Stores.setOrderDescription();
+		this.type = Stores.setType();			// problem
+		this.itemList = Stores.setItemList();	// problem
+		this.businessTime = Stores.setBusinessTime();
+		
+	}
 	
 	//getters
-
 	public String getAccount() {
 		return account;
 	}
@@ -46,7 +96,11 @@ public class Stores {
 		return name;
 	}
 	public Position getPosition() {
-		return position;
+		System.out.println("----------- this is the position ------------");
+		System.out.println("address: "+this.position.getAddress());
+		System.out.println("latitude: "+this.position.getLatitude());
+		System.out.println("longitude: "+this.position.getLongtitude());
+		return this.position;
 	}
 	public String getPhone() {
 		return phone;
@@ -57,93 +111,142 @@ public class Stores {
 	public String getOrderDescription() {
 		return order_description;
 	}
-	public String[] getType() {
-	    String[] copy = new String[this.type.length];
-	    System.arraycopy(this.type, 0, copy, 0, copy.length);
+	public Queue<String> getType() {
+		System.out.println("----------- this is the type ------------");
+		for(String q : this.type){
+            System.out.println(q);
+        }
+		return this.type;
+	    
+	}
+	public Queue<Items> getItemList() {
+		System.out.println("----------- this is the menu ------------");
+		for(Items i : this.itemList){
+			System.out.println("price: " + i.getPrice());
+			System.out.println("name: " + i.getName());
+        }
+		return this.itemList;
+	}
+	public JSONObject getBusinessTime() {
+		System.out.println("----------- this is buisness time ------------");
+		JSONObject copy = this.businessTime;
+		// iterate through the json object
+		Set<String> set =  new LinkedHashSet<String>();  
+		set.add("mon");
+		set.add("tue");
+		set.add("wed");
+		set.add("thu");
+		set.add("fri");
+		set.add("sat");
+		set.add("sun");
+		Iterator keys = set.iterator();
+		while(keys.hasNext()) {
+			String str = (String) keys.next();
+			System.out.println(str + " :" + copy.get(str));
+;		}
+		// 
 	    return copy;
 	}
-	public Items[] getItemList() {
-		Items[] copy = new Items[this.itemList.length];
-	    System.arraycopy(this.itemList, 0, copy, 0, copy.length);
-	    return copy;
+	public Queue<Orders> getOrderList() {
+		Queue<Orders> copy = new LinkedList<Orders>(this.orderList);
+		return copy;
 	}
-	public String[] getBusinessTime() {
-		String[] copy = new String[this.businessTime.length];
-	    System.arraycopy(this.businessTime, 0, copy, 0, copy.length);
-	    return copy;
-	}
-	public Orders[] getOrderList() {
-		Orders[] copy = new Orders[this.orderList.length];
-	    System.arraycopy(this.orderList, 0, copy, 0, copy.length);
-	    return copy;
-	}
-	public Orders[] getHistoryOrders() {
-		Orders[] copy = new Orders[this.orderList.length];
-	    System.arraycopy(this.orderList, 0, copy, 0, copy.length);
-	    return copy;
+	public Queue<Orders> getHistoryOrders() {
+		Queue<Orders> copy = new LinkedList<Orders>(this.historyOrders);
+		return copy;
+
 	}
 	
 	
 	//setters
-	public void setAccount(String account) {
-		this.account = account;
+	
+	// loads specific store data 
+	public static JSONObject Loader(int index) {	
+		StoreReader stores = new StoreReader("stores_detail.json");
+		JSONObject store = (JSONObject) stores.jsonarr.get(index) ;
+		return store;		// returns json store
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	
+	public static String setName() {
+		String name = null;
+		name = (String) info.get("name");
+		return name;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	
+	// 
+	public static Position setPosition() {
+		Position position = new Position();
+		JSONObject loc = (JSONObject) info.get("position");
+		position.setAddress((String) loc.get("address"));
+		position.setLatitude(loc.get("latitude"));
+		position.setLongitude(loc.get("longitude"));
+		return position;
 	}
-	public void setDiscountThreshold(int discount_threshold) {
-		this.discount_threshold = discount_threshold;
+	// needs work
+	
+	// get phone number
+	public static String setPhone() {
+		String phone = null;
+		phone = (String) info.get("phone");;
+		return phone;
 	}
-	public void setDiscountAmount(int discount_amount) {
-		this.discount_amount = discount_amount;
+	public static String setStoreDescription() {
+		String store_description = null;
+		store_description = (String) info.get("store_description");
+		return store_description;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public static String setOrderDescription() {
+		String order_description = null;
+		order_description = (String) info.get("order_description");;
+		return order_description;
 	}
-	public void setPosition(Position position) {
-		this.position = position;
+	public static Queue<String> setType() {
+		JSONArray emparr = (JSONArray) info.get("type");
+		int size = emparr.size();
+		Queue<String> copy = new LinkedList<String>();
+		for(int i = 0; i < size; i++) {
+			copy.offer((String) emparr.get(i));
+		}
+
+	    return copy;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	
+	
+	public static Queue<Items> setItemList() {
+		JSONArray emparr = (JSONArray) info.get("menu");
+		int size = emparr.size();
+		Queue<Items> items = new LinkedList<Items>();
+		//Items[] items = new Items[size];
+	    for (int i = 0; i < size; i++) {
+	    	Items item = new Items();
+	    	JSONObject obj = (JSONObject) emparr.get(i);
+	    	item.setName((String) obj.get("name"));
+	    	item.setPrice((String) obj.get("price"));
+	    	//items[i] = item;
+	    	items.offer(item);
+	    }
+		return items;
 	}
-	public void setStoreDescription(String store_description) {
-		this.store_description = store_description;
+	public static JSONObject setBusinessTime() {
+		JSONObject empobj = (JSONObject) info.get("business_time");
+	    return empobj;
 	}
-	public void setOrderDescription(String order_description) {
-		this.order_description = order_description;
+	
+	//目前先寫成getter
+	public Queue<Orders> setOrderList() {
+		Queue<Orders> copy = new LinkedList<Orders>(this.orderList);
+		return copy;
 	}
-	public void setType(String[] type) {
-	    this.type = new String[type.length];
-	    System.arraycopy(type, 0, this.type, 0, type.length);
+	public Queue<Orders> setHistoryOrders() {
+		Queue<Orders> copy = new LinkedList<Orders>(this.historyOrders);
+		return copy;
 	}
-	public void setItemList(Items[] itemList) {
-	    this.itemList = new Items[itemList.length];
-	    System.arraycopy(itemList, 0, this.itemList, 0, itemList.length);
-	}
-	public void setBusinessTime(String[] businessTime) {
-	    this.businessTime = new String[businessTime.length];
-	    System.arraycopy(businessTime, 0, this.businessTime, 0, businessTime.length);
-	}
-	public void setOrderList(Orders[] orderList) {
-	    this.orderList = new Orders[orderList.length];
-	    System.arraycopy(orderList, 0, this.orderList, 0, orderList.length);
-	}
-	public void setHistoryOrders(Orders[] historyOrders) {
-	    this.historyOrders = new Orders[historyOrders.length];
-	    System.arraycopy(historyOrders, 0, this.historyOrders, 0, historyOrders.length);
-	}
+	
+	
 	
 	
 }
 
 
 
-/*
- * 問題：
- * 1.我們要做的是面向店家的程式對嗎？那如何和助教提供的json一起使用？
- * 2.前端的部分？
- */
 

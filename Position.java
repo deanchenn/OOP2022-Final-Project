@@ -1,27 +1,32 @@
-
+/**
+ * 
+ * @author deanchenn, yuhanchiang
+ * @version 2022/5/20
+ * changes: change latitude and longitude into double
+ */
 public class Position {
 	private String address;
-	private String latitude;
-	private String longitude;
+	private double latitude;
+	private double longitude;
 	
 	public String getAddress() {
 		return address;
 	}
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
-	public String getLongtitude() {
+	public double getLongtitude() {
 		return longitude;
 	}
 	
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+	public void setLatitude(Object latitude) {
+		this.latitude = Double.parseDouble(latitude.toString());
 	}
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+	public void setLongitude(Object longitude) {
+		this.longitude = Double.parseDouble(longitude.toString());
 	}
 	
 	

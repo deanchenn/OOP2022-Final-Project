@@ -1,12 +1,18 @@
-
+/**
+ * 
+ * @author deanchenn, yuhanchiang
+ * @version 2022/5/20
+ * @changes 
+ * change price to double
+ */
 public class Items {
 	private String name;
-	private int price;
+	private String price;
 	
 	public String getName() {
 		return name;
 	}
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
 	
@@ -14,7 +20,7 @@ public class Items {
 		this.name = name;
 	}
 	
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(String string) {
+		this.price = string;
 	}
 }

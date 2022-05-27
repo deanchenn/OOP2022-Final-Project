@@ -10,6 +10,7 @@ public class Orders {
 	private String customerName;
 	private String deliveryManName;
 	private String storeName;
+	private String storeAddress;
 	
 	public int getNumber() {
 		return number;
@@ -37,6 +38,9 @@ public class Orders {
 	}
 	public String getStoreName() {
 		return storeName;
+	}
+	public String getStoreAddress() {
+		return storeAddress;
 	}
 	
 	
@@ -67,6 +71,9 @@ public class Orders {
 	}
 	public void setStoreName(String storeName) {
 		this.storeName = storeName;
+	}
+	public void setStoreAddress(String storeAddress) {
+		this.storeAddress = storeAddress;
 	}
 	
 }
