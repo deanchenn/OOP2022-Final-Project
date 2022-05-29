@@ -9,8 +9,11 @@ import org.json.simple.parser.ParseException;
 /**
  * 
  * @author yuhanchiang
- * @version 2022/5/20
- * this class loads all the store information
+ * @version ver.0
+ * @changes
+ * added: 
+ * changed: 
+ * 
  */
 
 public class StoreReader {

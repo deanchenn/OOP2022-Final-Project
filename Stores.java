@@ -24,11 +24,10 @@ import java.util.Queue;
 /**
  * 
  * @author yuhanchiang, deanchenn
- * @version 2022/5/23
+ * @version 2022/5/29 ver.1
  * @changes
- * added: JSONObject info
- * changed: setters,
- * 			business time -> JSONObject (might change later)
+ * added: 
+ * changed: 
  * 
  */
 

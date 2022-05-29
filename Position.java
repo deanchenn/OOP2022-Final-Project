@@ -1,8 +1,11 @@
 /**
  * 
- * @author deanchenn, yuhanchiang
- * @version 2022/5/20
- * changes: change latitude and longitude into double
+ * @author yuhanchiang, deanchenn
+ * @version 2022/5/29 ver.1
+ * @changes
+ * added: 
+ * changed: 
+ * 
  */
 public class Position {
 	private String address;

@@ -1,9 +1,11 @@
 /**
  * 
- * @author deanchenn, yuhanchiang
- * @version 2022/5/20
- * @changes 
- * change price to double
+ * @author yuhanchiang, deanchenn
+ * @version 2022/5/29 ver.1
+ * @changes
+ * added: 
+ * changed: 
+ * 
  */
 public class Items {
 	private String name;
