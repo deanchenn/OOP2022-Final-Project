@@ -24,7 +24,7 @@ import java.util.Queue;
 /**
  * 
  * @author yuhanchiang, deanchenn
- * @version 2022/5/29 ver.1
+ * @version 2022/5/31 ver.2
  * @changes
  * added: 
  * changed: 
@@ -39,6 +39,8 @@ public class Stores {
 	private String email; //email
 	private int discount_threshold; //滿額x元後可得到折扣
 	private int discount_amount; //滿額後得到的折扣金額
+	
+	private boolean receiveOrNot = true;// 是否要接訂單
 	
 	//店家其他資訊（提供json檔）
 	
@@ -55,9 +57,9 @@ public class Stores {
 	private JSONObject businessTime; //營業時間
 	
 	// private Orders[] orderList; // 訂單的list
-	private Queue<Orders> orderList;
+	private Queue<Orders> orderList = new LinkedList<Orders>();
 	// private Orders[] historyOrders; // 歷史訂單的list
-	private Queue<Orders> historyOrders;
+	private Queue<Orders> historyOrders = new LinkedList<Orders>();
 	
 	// constructor
 	
@@ -65,7 +67,6 @@ public class Stores {
 		this.info = Stores.Loader(index);  
 		this.name = Stores.setName();
 		this.position = Stores.setPosition();	// no problem writing here
-
 		this.phone = Stores.setPhone();			// problem
 		this.store_description = Stores.setStoreDescription();
 		this.order_description = Stores.setOrderDescription();
@@ -231,10 +232,18 @@ public class Stores {
 	    return empobj;
 	}
 	
-	//目前先寫成getter
-	public Queue<Orders> setOrderList() {
-		Queue<Orders> copy = new LinkedList<Orders>(this.orderList);
-		return copy;
+	
+	
+	public void addOrder(Orders order) throws storeException {
+		if(!this.receiveOrNot) {// 店家沒空，接單失敗
+			throw new storeException(storeException.exceptionType.ImBusyNow);
+		}
+		else {// 店家有空，接單成功
+			this.orderList.offer(order);
+		}
+		
+		
+		
 	}
 	public Queue<Orders> setHistoryOrders() {
 		Queue<Orders> copy = new LinkedList<Orders>(this.historyOrders);
