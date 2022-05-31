@@ -5,10 +5,12 @@ import java.util.Queue;
  * This is the Delivery Man class for OOP Final Project.
  * 
  * @author 許祐嘉,deanchenn
- * @version 2022/5/29 ver.1
+ * @version 2022/5/31 ver.2
  * @changes
  * added: 
- * changed: 將currentOrder（目前訂單）從單一訂單改成一個可存複數訂單的Queue
+ * changed: 
+ * 			把setOrder寫成addOrder，也就是判斷當下外送員可接單後，把這個訂單加進目前已經接的currentOrder當中
+ * 			將currentOrder（目前訂單）從單一訂單改成一個可存複數訂單的Queue
  * 			我把IsOrderArrived（是否送達訂單）相關的method先comment掉，是否應該改成用Orders class中的state來紀錄較合理？
  * 
  */
@@ -55,11 +57,15 @@ public class DeliveryMan {
 	 * @throws deliveryManException If delivery man is not able to receive the
 	 *                              order.
 	 */
-	public void setOrder(Queue<Orders> order) throws deliveryManException {
+	public void addOrder(Orders order) throws deliveryManException {
 		if (!receiveOrNot) { // 外送員沒空->接單失敗
 			throw new deliveryManException(deliveryManException.exceptionType.ImBusyNow);
 		} else { // 外送員有空 ->接單成功
-			this.currentOrder = new LinkedList<Orders>(order);
+			if(this.currentOrder.isEmpty()) {
+				this.currentOrder = new LinkedList<Orders>();
+			}
+			this.currentOrder.offer(order);
+			
 		}
 		
 	}
