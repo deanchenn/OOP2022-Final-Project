@@ -16,10 +16,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
+
 public class Scene2Controller {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
+	
+	Stores store;
 	
 	@FXML
 	Label nameLabel;
@@ -30,13 +33,15 @@ public class Scene2Controller {
 	String un;
 	String iden;
 	
+	
 
 	
 	public void displayName(String username, String pw, String id) {
 		un = username;
+		store = new Stores(Integer.parseInt(un));
 		iden = id;
 		idLabel.setText("Login as: " + id);
-		nameLabel.setText("Hello: " + username);
+		nameLabel.setText("Hello: " + store.getName());
 		
 	}
 	

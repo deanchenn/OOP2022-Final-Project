@@ -45,6 +45,7 @@ public class Scene1Controller implements Initializable{
 	private Scene scene;
 	private Parent root;
 	
+	
 	public void login(ActionEvent event) throws IOException {
 		
 		String username = nameTextField.getText();
